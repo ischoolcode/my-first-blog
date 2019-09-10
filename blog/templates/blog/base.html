@@ -2,17 +2,27 @@
 <!doctype html>
 <html>
   <head>
+    {% block head %}
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, minimum-scale=1, maximum-scale=1">
-    <title>爱校码博文</title>
+    <title>{% block title %}爱校码博文{% endblock %}</title>
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
     <link href="//fonts.googleapis.com/css?family=Lobster&subset=latin,latin-ext" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="{% static 'css/blog.css' %}">
+    {% endblock %}
   </head>
   <body>
     <div class="page-header">
-      <h1><a href="/">爱校码博文</a></h1>
+      {% if user.is_authenticated %}
+         <a href="{% url 'post_new' %}" class="top-menu"><span class="glyphicon glyphicon-plus"></span></a>
+         <a href="{% url 'post_draft_list' %}" class="top-menu"><span class="glyphicon glyphicon-edit"></span></a>
+         <p class="top-menu">您好, {{ user.username }} <small><a href="{% url 'logout' %}"><span class="glyphicon glyphicon-log-out">[注销]</span></a></small></p>
+      {% else %}
+         <a href="{% url 'register' %}" class="top-menu"><span class="glyphicon glyphicon-user"></span></a>
+	 <a href="{% url 'login' %}" class="top-menu"><span class="glyphicon glyphicon-log-in"></span></a>
+      {% endif %}
+      <h1>{% block h1 %}<a href="/">爱校码博文</a>{% endblock %}</h1>
     </div>
 
     <div class="content container">
@@ -23,5 +33,10 @@
 	</div>
       </div>
     </div>
+    {% block scripts %}
+      <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+      <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    {% endblock %}
   </body>
 </html>
+

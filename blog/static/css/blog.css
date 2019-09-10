@@ -1,5 +1,5 @@
 .page-header {
-    background-color: #ff9400;
+    background-color: #008B00;
     margin-top: 0;
     padding: 20px 20px 20px 40px;
 }
@@ -20,7 +20,7 @@ h1, h2, h3, h4 {
 
 .date {
     float: right;
-    color: #008B00;
+    color:#ff9400;
 }
 
 .save {
