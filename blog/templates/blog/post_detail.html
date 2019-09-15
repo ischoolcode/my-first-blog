@@ -4,17 +4,43 @@
 {% block h1 %} {{ block.super }} - 博文详情 {% endblock %}
 {% block content %}
 <div class="post">
-  {% if post.published_date %}
-    <div class="date">
-       {{ post.published_date|date:'Y-m-d H:i' }}
-    </div>
+  {% if user == post.author %}
+     {% if post.published_date %}
+       <div class="date">
+          {{ post.published_date|date:'Y-m-d H:i' }}
+       </div>
+     {% else %}
+       <a class="btn btn-default" href="{% url 'post_publish' pk=post.pk %}">发布</a>
+     {% endif %}
+  
+     <a class="btn btn-default" href="{% url 'post_edit' pk=post.pk %}"><span class="glyphicon glyphicon-pencil"></span></a>
+     <a class="btn btn-default" href="{% url 'post_remove' pk=post.pk %}" onclick="if(confirm('确定要删除吗？')==false) return false;" ><span class="glyphicon glyphicon-remove"></span></a>
   {% else %}
-    <a class="btn btn-default" href="{% url 'post_publish' pk=post.pk %}">发布</a>
+     <div class="date">
+       {{ post.published_date|date:'Y-m-d H:i' }}
+     </div>
   {% endif %}
-
-  <a class="btn btn-default" href="{% url 'post_edit' pk=post.pk %}"><span class="glyphicon glyphicon-pencil"></span></a>
-  <a class="btn btn-default" href="{% url 'post_remove' pk=post.pk %}"><span class="glyphicon glyphicon-remove"></span></a>
   <h1>{{ post.title }}</h1>
-  <p>{{ post.text|linebreaksbr }}</p>
+  <p>{{ post.text|safe }}</p>
 </div>
+<hr>
+<a class="btn btn-primary" href="{% url 'add_comment_to_post' pk=post.pk %}">添加评论</a>
+{% for comment in post.comments.all %}
+  {% if user.is_authenticated or comment.approved_comment %}
+  <div class="comment">
+     <div class="date">
+       {{ comment.created_date|date:'Y-m-d H:i' }} 
+       {% if not comment.approved_comment %}
+          <a class="btn btn-default" href="{% url 'comment_remove' pk=comment.pk %}"><span class="glyphicon glyphicon-remove"></span></a>
+          <a class="btn btn-default" href="{% url 'comment_approve' pk=comment.pk %}"><span class="glyphicon glyphicon-ok"></span></a>
+       {% endif %}
+     </div>
+     <strong>{{ comment.author }}</strong>
+     <p>{{ comment.text|linebreaks }}</p>
+  </div>
+  {% endif %}
+{% empty %}
+   <p/>
+   <p>暂无评论 :(</p>
+{% endfor %}
 {% endblock %}

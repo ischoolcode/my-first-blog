@@ -8,6 +8,7 @@
       {{ post.published_date|date:'Y-m-d H:i' }}
     </div>
     <h3><a href="{% url 'post_detail' pk=post.pk %}">{{ post.title }}</a></h3>
+    <a href="{% url 'post_detail' pk=post.pk %}">评论: {{ post.approved_comments.count }}</a>
  </div>
  {% endfor %}
 {% endblock %}

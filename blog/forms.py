@@ -1,6 +1,6 @@
 from django.contrib.auth.forms import AuthenticationForm
 from django import forms
-from .models import Post
+from .models import Post, Comment
 from django.contrib.auth.models import User
 
 class PostForm(forms.ModelForm):
@@ -28,3 +28,8 @@ class RegistrationForm(forms.ModelForm):
        if cd['password'] != cd['password2']:
           raise forms.ValidationError('两次输入的密码不匹配')
        return cd['password2']
+
+class CommentForm(forms.ModelForm):
+    class Meta:
+       model = Comment
+       fields = ('author', 'text',)
